@@ -35,13 +35,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void startPlayer(View v) {
         Intent i = new Intent(this, MediaPlayerService.class);
-        i.putExtra(MediaPlayerService.EXTRA_PLAYLIST, "main");
-        i.putExtra(MediaPlayerService.EXTRA_SHUFFLE, true);
         startService(i);
     }
 
     public void stopPlayer(View v) {
         stopService(new Intent(this, MediaPlayerService.class));
     }
-
 }

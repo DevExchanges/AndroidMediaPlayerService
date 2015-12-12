@@ -2,43 +2,41 @@ package devexchanges.info.mediaplayerservice;
 
 import android.app.Service;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.IBinder;
-import android.util.Log;
 
 public class MediaPlayerService extends Service {
-    public static final String EXTRA_PLAYLIST = "EXTRA_PLAYLIST";
-    public static final String EXTRA_SHUFFLE = "EXTRA_SHUFFLE";
-    private boolean isPlaying = false;
+
+    private MediaPlayer player;
+
+    public IBinder onBind(Intent arg0) {
+
+        return null;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        player = MediaPlayer.create(this, R.raw.canon_in_d);
+        player.setLooping(true); // Set looping
+        player.setVolume(100, 100);
+
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String playlist = intent.getStringExtra(EXTRA_PLAYLIST);
-        boolean useShuffle = intent.getBooleanExtra(EXTRA_SHUFFLE, false);
-        play(playlist, useShuffle);
-        return (START_NOT_STICKY);
+        player.start();
+        return 1;
     }
 
     @Override
     public void onDestroy() {
-        stop();
+        player.stop();
+        player.release();
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return (null);
-    }
+    public void onLowMemory() {
 
-    private void play(String playlist, boolean useShuffle) {
-        if (!isPlaying) {
-            Log.w(getClass().getName(), "Got to play()!");
-            isPlaying = true;
-        }
-    }
-
-    private void stop() {
-        if (isPlaying) {
-            Log.w(getClass().getName(), "Got to stop()!");
-            isPlaying = false;
-        }
     }
 }
